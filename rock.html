@@ -1,6 +1,13 @@
 <html>
     <head>
+        <title>Rock, Paper, Scissors!</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+            
         <script>
+            var playerScore = 0;
+            var computerScore = 0;
+
             function computerPlay()
             {
                 let choice = Math.floor(Math.random() * 3);
@@ -16,37 +23,96 @@
             {
                 let comp = computerSelection.toUpperCase();
                 let play = playerSelection.toUpperCase();
+                let playerli = document.createElement("li");
+                let computerli = document.createElement("li");
+                let playerList = document.querySelector("#playerlist");
+                let computerList = document.querySelector("#computerlist");
+                let presentResult = document.querySelector("#presentResult");
 
-                if(comp == play)
+                if(comp == play){
+                    playerli.innerHTML = comp[0] + comp.slice(1).toLowerCase();
+                    computerli.innerHTML = comp[0] + comp.slice(1).toLowerCase();
+                    
+                    playerList.appendChild(playerli);
+                    computerList.appendChild(computerli);
+                    presentResult.innerHTML = "It's a tie!";
                     return "Its a tie! Both of you selected " + comp[0] + comp.slice(1).toLowerCase();
-
+                
+                }
                 else
                 {
                     if(comp == "ROCK")
                     {
                         if(play == "PAPER")
                         {
+                            playerli.innerHTML = "Paper";
+                            computerli.innerHTML = "Rock";
+                            playerList.appendChild(playerli);
+                            computerList.appendChild(computerli);
+                            presentResult.innerHTML = "You win! Paper beats Rock";
+                            
+                            playerScore++;
                             return "You win! Paper beats Rock";
                         }
 
-                        else
+                        else{
+                            playerli.innerHTML = "Scissors";
+                            computerli.innerHTML = "Rock";
+                            playerList.appendChild(playerli);
+                            computerList.appendChild(computerli);
+                            presentResult.innerHTML = "You lose! Rock beats Scissors";
+                            
+                            computerScore++;
                             return "You lose! Rock beats Scissors";
+                        }
                     }
 
                     else if(comp == "PAPER")
                     {
-                        if(play == "ROCK")
+                        if(play == "ROCK"){
+                            playerli.innerHTML = "Rock";
+                            computerli.innerHTML = "Paper";
+                            playerList.appendChild(playerli);
+                            computerList.appendChild(computerli);
+                            presentResult.innerHTML = "You lose! Paper beats Rock";
+                            
+                            computerScore++;
                             return "You lose! Paper beats Rock";
-                        else
+                        }
+                        else{
+                            playerli.innerHTML = "Scissors";
+                            computerli.innerHTML = "Paper";
+                            playerList.appendChild(playerli);
+                            computerList.appendChild(computerli);
+                            presentResult.innerHTML = "You win! Scissors beats Paper";
+                            
+                            playerScore++;
                             return "You win! Scissors beats Paper";
+                        }
                     }
 
                     else if(comp == "SCISSORS")
                     {
-                        if(play == "ROCK")
+                        if(play == "ROCK"){
+                            playerli.innerHTML = "Rock";
+                            computerli.innerHTML = "Scissors";
+                            playerList.appendChild(playerli);
+                            computerList.appendChild(computerli);
+                            presentResult.innerHTML = "You win! Rock beats Scissors";
+                            
+                            playerScore++;
                             return "You win! Rock beats Scissors";
-                        else
+                        }
+                        else{
+                            playerli.innerHTML = "Paper";
+                            computerli.innerHTML = "Scissors";
+                            playerList.appendChild(playerli);
+                            computerList.appendChild(computerli);
+                            presentResult.innerHTML = "You lose! Scissors beats Paper";
+                            
+                            computerScore++;
                             return "You lose! Scissors beats Paper";
+                        }
                     }
 
                     else
@@ -54,32 +120,143 @@
                 }  
             }
 
-            function game()
+            function game(playerSelection)
             {
                 let wins = 0;
                 
-                for(let i = 0; i < 5; i++)
-                {
-                    let playerSelection = prompt("Enter your choice");
+                if(playerScore < 5 && computerScore < 5){
                     let result = playRound(playerSelection, computerPlay());
+                    let playerCount = document.querySelector("#playerCount");
+                    playerCount.style.color = "red";
+                    playerCount.innerHTML = playerScore;
+
+                    let computerCount = document.querySelector("#computerCount");
+                    computerCount.innerHTML = computerScore;
+
                     console.log(result);
                     if(result.indexOf("win") != -1)
                         wins++;
                     else if(result.indexOf("lose") != -1)
                         wins--;
+
+                    if(wins > 0)
+                        console.log(`You won ${wins} more than the computer to prevail!`);
+                    else if(wins < 0)
+                    {                    
+                        wins = -wins;
+                        console.log(`The computer won ${wins} more than you. Unfortunately, you lose!`);
+                    }
+
+                    else
+                        console.log(`It was a tie in the end! `);
                 }
 
-                if(wins > 0)
-                    console.log(`You won ${wins} more than the computer to prevail!`);
-                else if(wins < 0)
-                {                    
-                    wins = -wins;
-                    console.log(`The computer won ${wins} more than you. Unfortunately, you lose!`);
+                else{
+                    let presentResult = document.querySelector("#presentResult");
+                    if(playerScore == 5)
+                        presentResult.innerHTML = "You have won the Rock, Paper, Scissors Tournament! Hurray!";
+                    else
+                        presentResult.innerHTML = "Do not bow down to the computer overlords! Press Reset to try again!";
+    
+                }
+            }
+
+            function reset()
+            {
+                let playerList = document.querySelector("#playerlist");
+                while( playerList.firstChild ){
+                    playerList.removeChild( playerList.firstChild );
                 }
 
-                else
-                    console.log(`It was a tie in the end! `);
+                let computerList = document.querySelector("#computerlist");
+                while(computerList.firstChild)
+                    computerList.removeChild(computerList.firstChild);
+                
+                let presentResult = document.querySelector("#presentResult");
+                presentResult.innerHTML = "Select your choice to begin"; 
+
+                playerScore = 0;
+                computerScore = 0;
+
+                let playerCount = document.querySelector("#playerCount");
+                playerCount.style.color = "red";
+                playerCount.innerHTML = playerScore;
+
+                let computerCount = document.querySelector("#computerCount");
+                computerCount.innerHTML = computerScore;
+
+
             }
         </script>
+
+        <style>
+            body{
+                text-align: center;
+            }
+            .container-fluid ul li{
+                display: inline-block;
+                margin-right: 2rem;
+                margin: 0px;
+                padding-left: 0px;
+                padding-right: 30px;
+            }
+
+            .container-fluid ul li button{
+                padding: 50px !important;
+                border-radius: 5px 20px 5px !important;
+                margin-top: 20px !important;
+            }
+            
+            .container-fluid
+            {
+                align-content: center;
+                align-items: center;
+            }
+
+            #player ul li, #computer ul li
+            {
+                display: block;
+            }
+
+        </style>
     </head>
+
+    <body>
+        <h1>Rock, Paper, Scissors!</h1>
+        <p>Select your choice</p>
+        <div class = "container-fluid">
+                <div class="row justify-content-center">
+                <table>
+                    <td style="vertical-align: top;">
+                        <div id="player"class = container-fluid style="text-align:left; margin-top: 20px !important;">
+                            <h1>Your choice</h1>
+                            <h3 id="playerCount" style="text-align:center;"></h3>
+                            <ul style="list-style: none;" id="playerlist">
+                            </ul>
+                        </div>
+                    </td>
+
+                    <td>
+                        <ul>
+                            <li><button class="btn btn-info" onclick = "game('Rock')">Rock</button></li>
+                            <li><button class="btn btn-info" onclick="game('Paper')">Paper</button></li>
+                            <li><button class="btn btn-info" onclick="game('Scissors')">Scissors</button></li>                
+                        </ul>
+
+                    </td>
+
+                    <td style="vertical-align:top;">
+                        <div id = "computer" class = container-fluid style="text-align:right; margin-top: 20px !important;">
+                            <h1>Computer's choice</h1>
+                            <h3 id="computerCount" style="text-align:center;"></h3>
+                            <ul style="list-style:none" id = "computerlist">
+                            </ul>
+                        </div>
+                    </td>
+                </table>
+            </div>
+            <h1 style="margin-top: 10%; margin-bottom: 5%;" id="presentResult">Select your choice to begin</h1>
+            <button class="btn btn-warning" onclick="reset()">Reset</button>
+
+    </body>
 </html>
