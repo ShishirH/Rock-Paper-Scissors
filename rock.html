@@ -1,0 +1,85 @@
+<html>
+    <head>
+        <script>
+            function computerPlay()
+            {
+                let choice = Math.floor(Math.random() * 3);
+                if(choice < 1)
+                    return "Rock";
+                else if (choice < 2)
+                    return "Paper";
+                else
+                    return "Scissors";
+            }
+
+            function playRound(playerSelection, computerSelection)
+            {
+                let comp = computerSelection.toUpperCase();
+                let play = playerSelection.toUpperCase();
+
+                if(comp == play)
+                    return "Its a tie! Both of you selected " + comp[0] + comp.slice(1).toLowerCase();
+
+                else
+                {
+                    if(comp == "ROCK")
+                    {
+                        if(play == "PAPER")
+                        {
+                            return "You win! Paper beats Rock";
+                        }
+
+                        else
+                            return "You lose! Rock beats Scissors";
+                    }
+
+                    else if(comp == "PAPER")
+                    {
+                        if(play == "ROCK")
+                            return "You lose! Paper beats Rock";
+                        else
+                            return "You win! Scissors beats Paper";
+                    }
+
+                    else if(comp == "SCISSORS")
+                    {
+                        if(play == "ROCK")
+                            return "You win! Rock beats Scissors";
+                        else
+                            return "You lose! Scissors beats Paper";
+                    }
+
+                    else
+                        return "Incorrect input. Please try again";
+                }  
+            }
+
+            function game()
+            {
+                let wins = 0;
+                
+                for(let i = 0; i < 5; i++)
+                {
+                    let playerSelection = prompt("Enter your choice");
+                    let result = playRound(playerSelection, computerPlay());
+                    console.log(result);
+                    if(result.indexOf("win") != -1)
+                        wins++;
+                    else if(result.indexOf("lose") != -1)
+                        wins--;
+                }
+
+                if(wins > 0)
+                    console.log(`You won ${wins} more than the computer to prevail!`);
+                else if(wins < 0)
+                {                    
+                    wins = -wins;
+                    console.log(`The computer won ${wins} more than you. Unfortunately, you lose!`);
+                }
+
+                else
+                    console.log(`It was a tie in the end! `);
+            }
+        </script>
+    </head>
+</html>
